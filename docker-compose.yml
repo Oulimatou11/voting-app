@@ -1,0 +1,61 @@
+services:
+  vote:
+    build:
+      context: ./vote
+      dockerfile: Dockerfile
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "5000:80"
+    environment:
+      - REDIS_HOST=redis
+
+  result:
+    build:
+      context: ./result
+      dockerfile: Dockerfile
+    networks:
+      - frontend
+      - backend
+    ports:
+      - "5001:80"
+    environment:
+      - DB_HOST=db
+
+  worker:
+    build:
+      context: ./worker
+      dockerfile: Dockerfile
+    networks:
+      - backend
+    environment:
+      - REDIS_HOST=redis
+      - DB_HOST=db
+
+  redis:
+    image: redis:alpine
+    networks:
+      - backend
+
+  db:
+    image: postgres:latest
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - backend
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+
+volumes:
+  db-data:
+
+networks:
+  frontend:
+    name: frontend
+    driver: bridge
+  backend:
+    name: backend
+    driver: bridge
