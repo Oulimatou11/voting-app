@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKERHUB_CREDENTIALS = credentials('docker-hub-credentials')
         VERSION = "${BUILD_NUMBER}"
-        DOCKERHUB_USERNAME = "sene.oulimatou@gmail.com"
+        DOCKERHUB_USERNAME = "oulimatou"
 
         APP_VERSION = "v1.${BUILD_NUMBER}"
         
@@ -16,7 +16,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/Oulimatou11/voting-app.git'
+                git credentialsId: 'github-credentials', url: 'https://github.com/Oulimatou11/voting-app.git', branch: 'main'
             }
         }
 
