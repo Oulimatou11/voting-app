@@ -27,9 +27,9 @@ pipeline {
                     sh "docker-compose build"
 
                     sh """
-                        docker tag voting-app_vote:latest ${VOTE_SERVICE}:${APP_VERSION}
-                        docker tag voting-app_result:latest ${RESULT_SERVICE}:${APP_VERSION}
-                        docker tag voting-app_worker:latest ${WORKER_SERVICE}:${APP_VERSION}
+                        docker tag voting-app-pipeline-vote:latest ${VOTE_SERVICE}:${APP_VERSION}
+                        docker tag voting-app-pipeline-result:latest ${RESULT_SERVICE}:${APP_VERSION}
+                        docker tag voting-app-pipeline-worker:latest ${WORKER_SERVICE}:${APP_VERSION}
                     """
                 }
             }
@@ -57,9 +57,9 @@ pipeline {
                     echo "Updating docker-compose.yml with new image versions..."
 
                     sh """
-                        sed -i 's|build:.*|image: ${VOTE_SERVICE}:${APP_VERSION}|' docker-compose.yml
-                        sed -i 's|build:.*|image: ${RESULT_SERVICE}:${APP_VERSION}|' docker-compose.yml
-                        sed -i 's|build:.*|image: ${WORKER_SERVICE}:${APP_VERSION}|' docker-compose.yml
+                        sed -i '/vote:/!b;n;c\\    image: ${VOTE_SERVICE}:${APP_VERSION}' docker-compose.yml
+			sed -i '/result:/!b;n;c\\    image: ${RESULT_SERVICE}:${APP_VERSION}' docker-compose.yml
+			sed -i '/worker:/!b;n;c\\    image: ${WORKER_SERVICE}:${APP_VERSION}' docker-compose.yml
                     """
 
                     echo "Stopping existing containers..."
