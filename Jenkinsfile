@@ -16,7 +16,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'github-credentials', url: 'https://github.com/Oulimatou11/voting-app.git', branch: 'main'
+                git credentialsId: 'github-credentials',
+		url: 'https://github.com/Oulimatou11/voting-app.git',
+		branch: 'main'
             }
         }
 
@@ -66,7 +68,7 @@ pipeline {
             echo "Pipeline failed!"
         }
         always {
-            echo "Cleaning up..."
+            echo "Cleaning up.."
             sh "docker logout"
         }
     }
