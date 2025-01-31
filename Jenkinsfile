@@ -8,9 +8,9 @@ pipeline {
 
         APP_VERSION = "v1.${BUILD_NUMBER}"
         
-        VOTE_SERVICE = "${DOCKERHUB_USERNAME}/vote-app-vote"
-        RESULT_SERVICE = "${DOCKERHUB_USERNAME}/vote-app-result"
-        WORKER_SERVICE = "${DOCKERHUB_USERNAME}/vote-app-worker"
+        VOTE_SERVICE = "${DOCKERHUB_USERNAME}/voting-app-vote"
+        RESULT_SERVICE = "${DOCKERHUB_USERNAME}/voting-app-result"
+        WORKER_SERVICE = "${DOCKERHUB_USERNAME}/voting-app-worker"
     }
 
     stages {
@@ -53,8 +53,6 @@ pipeline {
 			APP_VERSION=${APP_VERSION} docker-compose down || true
 			APP_VERSION=${APP_VERSION} docker-compose up -d
 		    """
-                    echo "Stopping existing containers..."
-                    sh "docker-compose down || true"
                 }
             }
         }
