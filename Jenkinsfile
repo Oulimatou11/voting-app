@@ -25,12 +25,6 @@ pipeline {
                 script {
                     echo "Building Docker images..."
                     sh "docker-compose build"
-
-                    sh """
-                        docker tag voting-app-pipeline-vote:latest ${VOTE_SERVICE}:${APP_VERSION}
-                        docker tag voting-app-pipeline-result:latest ${RESULT_SERVICE}:${APP_VERSION}
-                        docker tag voting-app-pipeline-worker:latest ${WORKER_SERVICE}:${APP_VERSION}
-                    """
                 }
             }
         }
@@ -55,18 +49,12 @@ pipeline {
             steps {
                 script {
                     echo "Updating docker-compose.yml with new image versions..."
-
-                    sh """
-                        sed -i '/vote:/!b;n;c\\    image: ${VOTE_SERVICE}:${APP_VERSION}' docker-compose.yml
-			sed -i '/result:/!b;n;c\\    image: ${RESULT_SERVICE}:${APP_VERSION}' docker-compose.yml
-			sed -i '/worker:/!b;n;c\\    image: ${WORKER_SERVICE}:${APP_VERSION}' docker-compose.yml
-                    """
-
+		    sh """
+			APP_VERSION=${APP_VERSION} docker-compose down || true
+			APP_VERSION=${APP_VERSION} docker-compose up -d
+		    """
                     echo "Stopping existing containers..."
                     sh "docker-compose down || true"
-
-                    echo "Starting new containers..."
-                    sh "docker-compose up -d"
                 }
             }
         }

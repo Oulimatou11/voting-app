@@ -2,7 +2,7 @@ services:
   vote:
     build:
       context: ./vote
-      dockerfile: Dockerfile
+      image: oulimatou/vote-app-vote:${APP_VERSION}
     networks:
       - frontend
       - backend
@@ -14,7 +14,7 @@ services:
   result:
     build:
       context: ./result
-      dockerfile: Dockerfile
+      image: oulimatou/vote-app-result:${APP_VERSION}
     networks:
       - frontend
       - backend
@@ -26,7 +26,7 @@ services:
   worker:
     build:
       context: ./worker
-      dockerfile: Dockerfile
+      image: oulimatou/vote-app-worker:${APP_VERSION}
     networks:
       - backend
     environment:
